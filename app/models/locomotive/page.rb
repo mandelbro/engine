@@ -20,6 +20,7 @@ module Locomotive
     field :title,               localize: true
     field :slug,                localize: true
     field :fullpath,            localize: true
+    field :_fullpath,           localize: true
     field :handle
     field :raw_template,        localize: true
     field :locales,             type: Array

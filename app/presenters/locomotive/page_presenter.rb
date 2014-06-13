@@ -11,6 +11,8 @@ module Locomotive
 
     property    :position, type: 'Integer'
 
+    property    :_fullpath
+
     properties  :handle, :response_type, :cache_strategy
 
     property    :redirect, type: 'Boolean'
