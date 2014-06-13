@@ -12,6 +12,7 @@ de:
 
     locales:
       en: Englisch
+      en-GB: Englisch (Europe)
       de: Deutsch
       fr: Französisch
       pl: Polnisch
@@ -20,6 +21,7 @@ de:
       nl: Niederländisch
       nb: Norwegisch
       es: Spanisch
+      es-MX: Spanisch (Latam)
       ru: Russisch
       et: Estnisch
       ja: Japanisch

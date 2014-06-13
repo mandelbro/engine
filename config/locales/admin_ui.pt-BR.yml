@@ -11,6 +11,7 @@ pt-BR:
 
     locales:
       en: Inglês
+      en-GB: Inglês
       de: Alemão
       fr: Francês
       pl: Polonês
@@ -19,6 +20,7 @@ pt-BR:
       nl: Holandês
       nb: Norueguês
       es: Espanhol
+      es-MX: Espanhol (Latam)
       ru: Russo
       et: Estoniano
       ja: Japonês
