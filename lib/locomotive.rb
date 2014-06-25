@@ -20,6 +20,7 @@ require 'locomotive/routing'
 require 'locomotive/cancan'
 require 'locomotive/regexps'
 require 'locomotive/render'
+require 'locomotive/strainer'
 require 'locomotive/middlewares'
 
 module Locomotive

@@ -48,6 +48,10 @@ module Locomotive
           url.starts_with?('/') ? url : "/#{url}"
         end
 
+        def current_site
+          self.context.registers[:site]
+        end
+
       end
 
       ::Liquid::Template.register_filter(Base)
