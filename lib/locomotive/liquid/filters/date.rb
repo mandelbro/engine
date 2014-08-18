@@ -74,6 +74,27 @@ module Locomotive
           end
         end
 
+        def date_range(start_date, end_date)
+
+          start_date    = to_time(start_date)
+          end_date      = to_time(end_date)
+          start_month   = start_date.strftime('%B')
+          end_month     = end_date.strftime('%B')
+          date_range    = ''
+
+          date_range = "#{start_month} #{start_date.mday}"
+          date_range += ", #{start_date.year}" unless start_date.year == end_date.year
+          date_range += '&ndash;'
+
+          if start_date.mon == end_date.mon
+            date_range += "#{end_date.mday}"
+          else
+            date_range += "#{end_month} #{end_date.mday}"
+          end
+
+          date_range += ", #{end_date.year}"
+        end
+
       end
 
       ::Liquid::Template.register_filter(Date)
