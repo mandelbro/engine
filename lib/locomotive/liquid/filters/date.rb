@@ -63,17 +63,6 @@ module Locomotive
 
         alias :format_date :localized_date
 
-        private
-
-        def to_time(input)
-          case input
-          when Date   then input.to_time
-          when String then Time.zone.parse(input)
-          else
-            input
-          end
-        end
-
         def date_range(start_date, end_date)
 
           start_date    = to_time(start_date)
@@ -93,6 +82,17 @@ module Locomotive
           end
 
           date_range += ", #{end_date.year}"
+        end
+
+        private
+
+        def to_time(input)
+          case input
+          when Date   then input.to_time
+          when String then Time.zone.parse(input)
+          else
+            input
+          end
         end
 
       end
