@@ -45,6 +45,43 @@ module Locomotive
           super(token)
         end
 
+        def prepare_options(markup)
+          @options = {}
+          markup.scan(::Liquid::TagAttributes) do |key, value|
+            if swoop_terms.include? key
+              @options['query'] ||= {}
+              @options['query'][key] = value.gsub(/['"]/, '')
+
+            else
+              @options[key] = value if key != 'http'
+            end
+          end
+
+          @options['timeout'] = @options['timeout'].to_f if @options['timeout']
+          @expires_in = (@options.delete('expires_in') || 0).to_i
+        end
+
+        def swoop_terms
+          swoop_event_terms + swoop_people_terms
+        end
+
+        def swoop_event_terms
+          %w{
+            city nickname country manager region state event_status
+            event_type expense_status financial_status facilitator
+            venue nearby within since until vertical bootcamp_sponsor
+            microsoft_windows_8_event microsoft_bizspark_event google_event
+          }
+        end
+
+        def swoop_people_terms
+          %w{
+            roles skills first_name last_name email twitter_handle
+            address1 address2 city state_province zip country nearby
+            within active region_of_interest country_of_interest languages
+          }
+        end
+
       end
 
       ::Liquid::Template.register_tag('consume_swoop', ConsumeSwoop)

@@ -35,24 +35,61 @@ describe Locomotive::Liquid::Tags::ConsumeSwoop do
     end
 
     it 'validates more complex syntax with attributes' do
-      pending "disabled"
-
       markup = 'event from "events" username: "john", password: "easyone"'
       lambda do
         Locomotive::Liquid::Tags::ConsumeSwoop.new('consume_swoop', markup, ["{% endconsume_swoop %}"], {})
       end.should_not raise_error
     end
 
-    it 'should parse the correct url with complex syntax with attributes' do
-      pending "disabled"
+    it 'adds swoop event search terms into the query object' do
+      markup =
+        'event from "events" city: "Seattle", event_type: "Startup Weekend", timeout: 30'
+      tag = make_tag(markup)
 
-      markup = 'blog from "http://www.locomotiveapp.org" username: "john", password: "easyone"'
+      options = tag.instance_variable_get(:@options)
+      options.keys.should include("query")
+
+      options['query'].keys.should include("city")
+      options['query'].keys.should include("event_type")
+
+      options['query']['city'].should == "Seattle"
+      options['query']['event_type'].should == "Startup Weekend"
+    end
+
+    it 'adds swoop people search terms into the query object' do
+      markup =
+        'event from "people" roles: "Core Team", timeout: 30'
+      tag = make_tag(markup)
+
+      options = tag.instance_variable_get(:@options)
+      options.keys.should include("query")
+
+      options['query'].keys.should include("roles")
+
+      options['query']['roles'].should == "Core Team"
+    end
+
+    it 'does not add non-swoop search terms to the query object' do
+      markup =
+        'event from "events" city: "Seattle", event_type: "Startup Weekend", timeout: 30'
+      tag = make_tag(markup)
+
+      options = tag.instance_variable_get(:@options)
+      options.keys.should include("query")
+      options.keys.should include("timeout")
+
+      options['query'].keys.should include("city")
+      options['query'].keys.should_not include("timeout")
+    end
+
+    it 'should parse the correct url with complex syntax with attributes' do
+      markup = 'events from "events" event_type: "Startup Weekend", city: "Seattle"'
       tag = Locomotive::Liquid::Tags::ConsumeSwoop.new('consume_swoop', markup, ["{% endconsume_swoop %}"], {})
-      tag.instance_variable_get(:@url).should == "http://www.locomotiveapp.org"
+      tag.instance_variable_get(:@url).should == "https://swoop.up.co/events"
     end
 
     it 'raises an error if the syntax is incorrect' do
-      markup = 'blog http://www.locomotiveapp.org'
+      markup = 'events http://swoop.up.co'
       lambda do
         Locomotive::Liquid::Tags::ConsumeSwoop.new('consume_swoop', markup, ["{% endconsume_swoop %}"], {})
       end.should raise_error
