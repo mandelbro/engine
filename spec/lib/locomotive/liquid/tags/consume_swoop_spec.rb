@@ -122,4 +122,25 @@ describe Locomotive::Liquid::Tags::ConsumeSwoop do
       tag.instance_variable_get(:@swoop_base).should == 'https://swoop.up.co'
     end
   end
+
+  context 'basic authentication' do
+    before(:each) do
+      @prev_swoop_user = ENV['SWOOP_USER']
+      @prev_swoop_pass = ENV['SWOOP_PASS']
+    end
+
+    after(:each) do
+      ENV['SWOOP_USER'] = @prev_swoop_user
+      ENV['SWOOP_PASS'] = @prev_swoop_pass
+    end
+
+    it 'should automatically add username and password to options' do
+      ENV['SWOOP_USER'] = 'user'
+      ENV['SWOOP_PASS'] = 'pass'
+      tag = make_tag("events from 'events'")
+
+      tag.instance_variable_get(:@swoop_user).should == 'user'
+      tag.instance_variable_get(:@swoop_pass).should == 'pass'
+    end
+  end
 end

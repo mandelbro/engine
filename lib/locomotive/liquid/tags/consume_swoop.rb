@@ -22,6 +22,8 @@ module Locomotive
 
         def initialize(tag_name, markup, tokens, context)
           @swoop_base = ENV['SWOOP_URL'] || 'https://swoop.up.co'
+          @swoop_user = ENV['SWOOP_USER'] || ''
+          @swoop_pass = ENV['SWOOP_PASS'] || ''
           super
         end
 
@@ -58,6 +60,10 @@ module Locomotive
 
           @options['timeout'] = @options['timeout'].to_f if @options['timeout']
           @expires_in = (@options.delete('expires_in') || 0).to_i
+
+          # Set up Basic Auth
+          auth = { username: @swoop_user, password: @swoop_pass }
+          @options[:basic_auth] = auth
         end
 
         def swoop_terms
