@@ -27,8 +27,6 @@ module Locomotive
 
         # If a URL is passed, prepend the SWOOP base URL before passing the value
         # back to the base class
-        # def new_prepare_url(token)
-        #alias_method :original_prepare_url, :prepare_url
         def prepare_url(token)
           known_endpoints = /events|people/
           if token.match(::Liquid::QuotedString) and token =~ known_endpoints
