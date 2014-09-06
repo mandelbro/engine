@@ -97,70 +97,29 @@ describe Locomotive::Liquid::Tags::ConsumeSwoop do
 
   end
 
-  context '#rendering' do
-
-    it 'puts the response into the liquid variable' do
-      pending "disabled"
-
-      response = mock('response', code: 200, parsed_response: parsed_response('title' => 'Locomotive rocks !'))
-      Locomotive::Httparty::Webservice.stubs(:get).returns(response)
-      template = "{% consume_swoop blog from \"http://blog.locomotiveapp.org/api/read\" %}{{ blog.title }}{% endconsume %}"
-      Liquid::Template.parse(template).render.should == 'Locomotive rocks !'
-    end
-
-    it 'puts the response into the liquid variable using a url from a variable' do
-      pending "disabled"
-
-      response = mock('response', code: 200, parsed_response: parsed_response('title' => 'Locomotive rocks !'))
-      Locomotive::Httparty::Webservice.stubs(:get).returns(response)
-      template = "{% consume_swoop blog from url %}{{ blog.title }}{% endconsume %}"
-      Liquid::Template.parse(template).render('url' => "http://blog.locomotiveapp.org/api/read").should == 'Locomotive rocks !'
-    end
-
-    it 'puts the response into the liquid variable using a url from a variable that changes within an iteration' do
-      pending "disabled"
-
-      base_uri = 'http://blog.locomotiveapp.org'
-      template = "{% consume_swoop blog from url %}{{ blog.title }}{% endconsume %}"
-      compiled_template = Liquid::Template.parse(template)
-
-      [['/api/read', 'Locomotive rocks !'], ['/api/read_again', 'Locomotive still rocks !']].each do |path, title|
-        response = mock('response', code: 200, parsed_response: parsed_response('title' => title))
-        Locomotive::Httparty::Webservice.stubs(:get).with(path, {:base_uri => base_uri}).returns(response)
-        compiled_template.render('url' => base_uri + path).should == title
-      end
-    end
-  end
-
-  context 'timeout' do
-
-    before(:each) do
-      @url = 'http://blog.locomotiveapp.org/api/read'
-      @template = %{{% consume_swoop blog from "#{@url}" timeout:5 %}{{ blog.title }}{% endconsume_swoop %}}
-    end
-
-    it 'should pass the timeout option to httparty' do
-      pending "disabled"
-
-      Locomotive::Httparty::Webservice.expects(:consume).with(@url, {timeout: 5.0})
-      Liquid::Template.parse(@template).render
-    end
-
-    it 'should return the previous successful response if a timeout occurs' do
-      pending "disabled"
-
-      Locomotive::Httparty::Webservice.stubs(:consume).returns({ 'title' => 'first response' })
-      template = Liquid::Template.parse(@template)
-
-      template.render.should == 'first response'
-
-      Locomotive::Httparty::Webservice.stubs(:consume).raises(Timeout::Error)
-      template.render.should == 'first response'
-    end
-
-  end
-
   def parsed_response(attributes)
     OpenStruct.new(underscore_keys: attributes)
+  end
+
+  context 'configuring the tag' do
+    before(:each) do
+      @prev_env_val = ENV['SWOOP_URL']
+    end
+
+    after(:each) do
+      ENV['SWOOP_URL'] = @prev_env_val
+    end
+
+    it 'should pull swoop base url from environment if available' do
+      new_base = 'http://sw-swoop.herokuapp.com'
+      ENV['SWOOP_URL'] = new_base
+      tag = make_tag("events from 'events'")
+      tag.instance_variable_get(:@swoop_base).should == new_base
+    end
+
+    it 'should default to https://swoop.up.co' do
+      tag = make_tag("events from 'events'")
+      tag.instance_variable_get(:@swoop_base).should == 'https://swoop.up.co'
+    end
   end
 end

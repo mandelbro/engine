@@ -21,6 +21,7 @@ module Locomotive
       class ConsumeSwoop < Consume
 
         def initialize(tag_name, markup, tokens, context)
+          @swoop_base = ENV['SWOOP_URL'] || 'https://swoop.up.co'
           super
         end
 
@@ -38,7 +39,7 @@ module Locomotive
             token = token.slice(1, token.length) if token[0] == "/"
 
             # Prepend value and wrap in quotes before passing along
-            token = "'https://swoop.up.co/#{ token }'"
+            token = "'#{ @swoop_base }/#{ token }'"
           end
 
           # Delegate back to base implementation
