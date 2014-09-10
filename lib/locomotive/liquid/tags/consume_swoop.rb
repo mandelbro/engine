@@ -47,12 +47,11 @@ module Locomotive
         end
 
         def prepare_options(markup)
-          @options = {}
+          @options ||= {}
+          @options[:query] ||= {}
           markup.scan(::Liquid::TagAttributes) do |key, value|
             if swoop_terms.include? key
-              @options['query'] ||= {}
-              @options['query'][key] = value.gsub(/['"]/, '')
-
+              @options[:query][key.to_sym] = value.gsub(/['"]/, '')
             else
               @options[key] = value if key != 'http'
             end
