@@ -86,6 +86,13 @@ module Locomotive
           }
         end
 
+        def render_all_without_cache(context)
+          @options[:query].each do |key,value|
+            @options[:query][key] = context[value] unless context[value].nil?
+          end
+          super
+        end
+
       end
 
       ::Liquid::Template.register_tag('consume_swoop', ConsumeSwoop)
