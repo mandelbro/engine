@@ -84,6 +84,16 @@ module Locomotive
           date_range += ", #{end_date.year}"
         end
 
+        def date_range_to(start_date, days = 0)
+
+          start_date    = Time.parse(start_date)
+          days          = 60*60*24 * days.to_i
+          end_date      = start_date + days
+
+          # send it to date_range
+          date_range start_date, end_date
+        end
+
         private
 
         def to_time(input)
