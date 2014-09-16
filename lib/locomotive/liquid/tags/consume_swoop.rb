@@ -72,7 +72,7 @@ module Locomotive
         def swoop_event_terms
           %w{
             city nickname country manager region state event_status
-            event_type expense_status financial_status facilitator
+            event_type expense_status financial_status facilitator per_page
             venue nearby within since until vertical bootcamp_sponsor
             microsoft_windows_8_event microsoft_bizspark_event google_event
           }
