@@ -6,6 +6,7 @@ module Locomotive
     ## extensions ##
     include Extensions::Asset::Types
     include Extensions::Asset::Vignette
+    include Locomotive::Cloudflare::Asset
 
     ## fields ##
     field :content_type,  type: String
@@ -26,6 +27,9 @@ module Locomotive
     ## scopes ##
     scope :ordered,     order_by(created_at: :desc)
     scope :by_filename, ->(query) { where(source_filename: /.*#{query}.*/i) }
+
+    ## callbacks ##
+    after_save            :expire_cache
 
     ## methods ##
 

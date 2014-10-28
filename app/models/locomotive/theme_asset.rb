@@ -5,6 +5,7 @@ module Locomotive
 
     ## extensions ##
     include Extensions::Asset::Types
+    include Locomotive::Cloudflare::Asset
 
     ## fields ##
     field :local_path
@@ -30,6 +31,7 @@ module Locomotive
     before_validation :sanitize_folder
     before_validation :build_local_path
     before_save       :calculate_checksum
+    after_save        :expire_cache
 
     ## validations ##
     validates_presence_of   :site
