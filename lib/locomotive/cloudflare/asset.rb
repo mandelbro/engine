@@ -6,9 +6,6 @@ module Locomotive
 
       module ClassMethods
 
-        # after_update :expire_cache
-
-
         def expire_cache
           p document
         end
@@ -21,14 +18,22 @@ module Locomotive
 
       def expire file
 
-        unless Locomotive.config.cloudflare?
-
-          cf = CloudFlare::connection(Locomotive.config.cloudflare_api_key, Locomotive.config.cloudflare_email)
-          path = "sites/#{file.site_id}/#{file.folder}"
-          p path
+        unless Locomotive.config.cloudflare.nil?
+          url = "http://#{Locomotive.config.cloudflare_asset_domain}/sites/#{file.site_id}/#{file.folder}/#{file.source_filename}"
+          p url
+          data = {
+            verify: false,
+            query: {
+              tkn: Locomotive.config.cloudflare_api_key,
+              email: Locomotive.config.cloudflare_email,
+              a: 'zone_file_purge',
+              z: Locomotive.config.cloudflare_asset_domain,
+              url: url
+            }
+          }
 
           begin
-              cf.zone_file_purge(Locomotive.config.cloudflare_asset_domain, path)
+            HTTParty.post("https://www.cloudflare.com/api_json.html", data)
           rescue => e
               puts e.message # error message
           else
