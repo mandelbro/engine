@@ -43,7 +43,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'flash_cookie_session',            '~> 1.1.1'
 
   s.add_dependency 'locomotivecms_solid',             '~> 0.2.2'
-<<<<<<< HEAD
   s.add_dependency 'formtastic',                      '~> 3.0.0'
   s.add_dependency 'responders',                      '~> 1.1.1'
   s.add_dependency 'cells',                           '~> 3.11.2'
@@ -57,21 +56,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'fog',                             '~> 1.24.0'
   s.add_dependency 'dragonfly',                       '~> 1.0.7'
   s.add_dependency 'rack-cache',                      '~> 1.2'
-=======
-  s.add_dependency 'formtastic',                      '~> 2.2.1'
-  s.add_dependency 'responders',                      '~> 0.9.2'
-  s.add_dependency 'cells',                           '~> 3.8.0'
-  s.add_dependency 'RedCloth',                        '~> 4.2.8'
-  s.add_dependency 'redcarpet',                       '~> 3.0.0'
-  s.add_dependency 'sanitize',                        '2.0.3'
-  s.add_dependency 'highline',                        '~> 1.6.2'
-  s.add_dependency 'stringex',                        '~> 2.0.3'
-
-  s.add_dependency 'carrierwave-mongoid',             '~> 0.6.2'
-  s.add_dependency 'fog',                             '~> 1.24.0'
-  s.add_dependency 'dragonfly',                       '~> 1.0.4'
-  s.add_dependency 'rack-cache',                      '~> 1.1'
->>>>>>> FETCH_HEAD
   s.add_dependency 'mimetype-fu',                     '~> 0.1.2'
 
   s.add_dependency 'multi_json',                      '~> 1.9.3'
