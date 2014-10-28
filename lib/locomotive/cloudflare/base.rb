@@ -1,1 +1,2 @@
-require 'cloudflare'
+# require 'cloudflare'
+require 'httparty'
