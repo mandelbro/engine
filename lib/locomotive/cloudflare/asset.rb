@@ -19,8 +19,7 @@ module Locomotive
       def expire file
 
         unless Locomotive.config.cloudflare.nil?
-          url = "http://#{Locomotive.config.cloudflare_asset_domain}/sites/#{file.site_id}/#{file.folder}/#{file.source_filename}"
-          p url
+          url = "http://#{Locomotive.config.cloudflare_asset_domain}/#{self.source.url}"
           data = {
             verify: false,
             query: {
