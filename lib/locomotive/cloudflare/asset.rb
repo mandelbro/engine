@@ -19,7 +19,6 @@ module Locomotive
       def expire file
 
         unless Locomotive.config.cloudflare.nil?
-          url = "http://#{Locomotive.config.cloudflare_asset_domain}/#{self.source.url}"
           data = {
             verify: false,
             query: {
@@ -27,7 +26,7 @@ module Locomotive
               email: Locomotive.config.cloudflare_email,
               a: 'zone_file_purge',
               z: Locomotive.config.cloudflare_asset_domain,
-              url: url
+              url: self.source.url
             }
           }
 
@@ -36,7 +35,7 @@ module Locomotive
           rescue => e
               puts e.message # error message
           else
-            puts url
+            puts self.source.url
             puts 'Successfully expired asset from cache'
           end
 
