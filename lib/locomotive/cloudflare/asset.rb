@@ -36,6 +36,7 @@ module Locomotive
           rescue => e
               puts e.message # error message
           else
+            puts url
             puts 'Successfully expired asset from cache'
           end
 
