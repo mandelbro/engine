@@ -26,6 +26,14 @@ module Locomotive
           result
         end
 
+        def regex_remove(input, regex)
+          input.to_s.gsub(Regexp.new(regex), '')
+        end
+
+        def regex_replace(input, regex, replacement)
+          input.to_s.gsub(Regexp.new(regex), replacement.to_s)
+        end
+
         # right justify and padd a string
         def rjust(input, integer, padstr = '')
           input.to_s.rjust(integer, padstr)
