@@ -87,17 +87,19 @@ module Locomotive
         end
 
         def render_all_and_cache_it(context)
+          get_options_context(context)
           Rails.cache.fetch(page_fragment_cache_key("#{@url}?query=#{@options[:query].to_json}"), expires_in: @expires_in, force: @expires_in == 0) do
             self.render_all_without_cache(context)
           end
         end
 
-        def render_all_without_cache(context)
-          @options[:query].each do |key,value|
-            @options[:query][key] = context[value] unless context[value].nil?
+        private
+
+          def get_options_context(context)
+            @options[:query].each do |key,value|
+              @options[:query][key] = context[value] unless context[value].nil?
+            end
           end
-          super
-        end
 
       end
 
