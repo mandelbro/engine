@@ -26,12 +26,20 @@ module Locomotive
           result
         end
 
-        def regex_remove(input, regex)
-          input.to_s.gsub(Regexp.new(regex), '')
+        def regex_remove(input, regex, global = true)
+          if global == true
+            input.to_s.gsub(Regexp.new(regex), '')
+          else
+            input.to_s.sub(Regexp.new(regex), '')
+          end
         end
 
-        def regex_replace(input, regex, replacement)
-          input.to_s.gsub(Regexp.new(regex), replacement.to_s)
+        def regex_replace(input, regex, replacement, global = true)
+          if global == true
+            input.to_s.gsub(Regexp.new(regex), replacement.to_s)
+          else
+            input.to_s.sub(Regexp.new(regex), replacement.to_s)
+          end
         end
 
         # right justify and padd a string
