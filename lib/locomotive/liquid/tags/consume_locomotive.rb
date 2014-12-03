@@ -89,7 +89,7 @@ module Locomotive
               api_key: @locomotive_api_key
             }
           }
-          @auth_token = JSON.parse(Locomotive::Wagon::Httparty::Webservice.post("http://#{@locomotive_url}/locomotive/api/tokens.json", data).body)["token"]
+          @auth_token = JSON.parse(Locomotive::Httparty::Webservice.post("http://#{@locomotive_url}/locomotive/api/tokens.json", data).body)["token"]
         end
 
         def render_all_without_cache(context)
