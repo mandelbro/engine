@@ -96,16 +96,10 @@ module Locomotive
           get_options_context context
           context.stack do
             begin
-              context.scopes.last[@target.to_s] = Locomotive::Wagon::Httparty::Webservice.consume(render_url, @options.symbolize_keys)
+              context.scopes.last[@target.to_s] = Locomotive::Httparty::Webservice.consume(render_url, @options.symbolize_keys)
               self.cached_response = context.scopes.last[@target.to_s]
             rescue Timeout::Error
               context.scopes.last[@target.to_s] = self.cached_response
-            rescue ::Liquid::Error => e
-              raise e
-            rescue => e
-              liquid_e = ::Liquid::Error.new(e.message, line)
-              liquid_e.set_backtrace(e.backtrace)
-              raise liquid_e
             end
 
             render_all(@nodelist, context)
