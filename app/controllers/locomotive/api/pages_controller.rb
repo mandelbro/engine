@@ -5,7 +5,7 @@ module Locomotive
       load_and_authorize_resource class: ::Locomotive::Page, through: :current_site
 
       def index
-        @pages = @pages.order_by(:depth.asc, :position.asc)
+        @pages = @pages.where(page_params).order_by(:depth.asc, :position.asc)
         respond_with(@pages)
       end
 
@@ -77,6 +77,20 @@ module Locomotive
           }
         }
       end
+
+      private
+        # Never trust parameters from the scary internet, only allow the white list through.
+        def page_params
+          params.select do |key|
+            allowed_params.include? key
+          end
+        end
+
+        def allowed_params
+          %w{
+            slug title
+          }
+        end
 
     end
 
