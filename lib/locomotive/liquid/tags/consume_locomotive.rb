@@ -24,7 +24,6 @@ module Locomotive
 
         def initialize(tag_name, markup, tokens, context)
           if markup =~ Syntax
-            @locomotive_api_key = ENV['LOCOMOTIVE_API_KEY'] || ''
             prepare_base($3)
           end
           super
@@ -86,7 +85,7 @@ module Locomotive
           return @auth_token unless @auth_token.nil?
           data = {
             query: {
-              api_key: @locomotive_api_key
+              api_key: ENV['LOCOMOTIVE_API_KEY']
             }
           }
           @auth_token = JSON.parse(Locomotive::Httparty::Webservice.post("http://#{@locomotive_url}/locomotive/api/tokens.json", data).body)["token"]
