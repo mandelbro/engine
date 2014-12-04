@@ -15,8 +15,8 @@ module Locomotive
           def order_by_date object, field, direction = 'asc'
 
             object.sort do |a, b|
-              a_date = parse_date_time(a[field] || 0).to_i
-              b_date = parse_date_time(b[field] || 0).to_i
+              a_date = parse_date_time(a[field].to_s || 0).to_i
+              b_date = parse_date_time(b[field].to_s || 0).to_i
               if direction == 'asc'
                 a_date <=> b_date
               else
@@ -27,14 +27,14 @@ module Locomotive
 
           def since object, field, time
             object.select do |item|
-              item_date = parse_date_time(item[field] || 0).to_i
+              item_date = parse_date_time(item[field].to_s || 0).to_i
               item_date >= time.to_i
             end
           end
 
           def only_with object, field
             object.reject do |item|
-              item[field].empty?
+              item[field].nil? || item[field].empty?
             end
           end
 
