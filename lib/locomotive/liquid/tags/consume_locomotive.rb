@@ -68,17 +68,11 @@ module Locomotive
         end
 
         def render_url
-          known_endpoints = /events|accounts|content_assets|content_entries|current_site|memberships|pages|page|sites|translations/
-          # if @url =~ known_endpoints
             # Drop leading slash if present
             rendered_url = @url.slice(1, @url.length) if @url[0] == "/"
 
-            # Set up auth_token
-            @options[:query][:auth_token] ||= locomotive_auth_token
-
             # Prepend value and wrap in quotes before passing along
             "http://#{ @locomotive_url }/locomotive/api/#{ @url }.json"
-          # end
         end
 
         def locomotive_auth_token
@@ -91,8 +85,17 @@ module Locomotive
           @auth_token = JSON.parse(Locomotive::Httparty::Webservice.post("http://#{@locomotive_url}/locomotive/api/tokens.json", data).body)["token"]
         end
 
+        def render_all_and_cache_it(context)
+          get_options_context(context)
+          Rails.cache.fetch(page_fragment_cache_key("#{render_url}?query=#{@options[:query].to_json}"), expires_in: @expires_in, force: @expires_in == 0) do
+            self.render_all_without_cache(context)
+          end
+        end
+
         def render_all_without_cache(context)
-          get_options_context context
+          # Set up auth_token
+          @options[:query][:auth_token] ||= locomotive_auth_token
+
           context.stack do
             begin
               context.scopes.last[@target.to_s] = Locomotive::Httparty::Webservice.consume(render_url, @options.symbolize_keys)
