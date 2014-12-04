@@ -54,7 +54,7 @@ module Locomotive
             @url = context[@variable_name]
           end
 
-          render_all_without_cache(context)
+          render_all_and_cache_it(context)
         end
 
         def prepare_base token
@@ -68,11 +68,11 @@ module Locomotive
         end
 
         def render_url
-            # Drop leading slash if present
-            rendered_url = @url.slice(1, @url.length) if @url[0] == "/"
+          # Drop leading slash if present
+          rendered_url = @url.slice(1, @url.length) if @url[0] == "/"
 
-            # Prepend value and wrap in quotes before passing along
-            "http://#{ @locomotive_url }/locomotive/api/#{ @url }.json"
+          # Prepend value and wrap in quotes before passing along
+          "http://#{ @locomotive_url }/locomotive/api/#{ @url }.json"
         end
 
         def locomotive_auth_token
