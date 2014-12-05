@@ -31,7 +31,7 @@ module Locomotive
 
         def prepare_options(markup)
           @options ||= {}
-          @options[:query] ||= {}
+          @options[:query] = {}
           markup.scan(::Liquid::TagAttributes) do |key, value|
             if key == "query"
               CGI.parse(value.gsub(/['"]/, '')).each do |key, value|
@@ -87,6 +87,8 @@ module Locomotive
 
         def render_all_and_cache_it(context)
           get_options_context(context)
+          clear_auth_token
+
           Rails.cache.fetch(page_fragment_cache_key("#{render_url}?query=#{@options[:query].to_json}"), expires_in: @expires_in, force: @expires_in == 0) do
             self.render_all_without_cache(context)
           end
@@ -114,6 +116,10 @@ module Locomotive
             @options[:query].each do |key,value|
               @options[:query][key] = context[value] unless context[value].nil?
             end
+          end
+
+          def clear_auth_token
+            @options[:query].delete(:auth_token)
           end
 
       end
